@@ -2,3 +2,5 @@ ui.sh
 jukebox
 spshell
 *.o
+tmp
+ui/ui
