@@ -19,6 +19,32 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="ui/alsa-audio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ui/audio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ui/audio.h" />
+		<Unit filename="ui/dummy-audio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ui/jukebox.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ui/openal-audio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ui/osx-audio.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ui/playtrack.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ui/queue.h" />
+		<Unit filename="ui/ui.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Extensions>
 			<code_completion />
 			<debugger />

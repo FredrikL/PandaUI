@@ -4,3 +4,4 @@ spshell
 *.o
 tmp
 ui/ui
+*.layout

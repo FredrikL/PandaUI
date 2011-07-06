@@ -575,6 +575,46 @@ void
     }
   }
 
+void add_treeview_for_playlist_items()
+{
+    GtkWidget *scl = gtk_scrolled_window_new(NULL,
+                                       NULL);
+    gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(scl),
+                                   GTK_POLICY_NEVER,
+                                   GTK_POLICY_ALWAYS);
+    gtk_table_attach(GTK_TABLE(tbl_Main),
+                      scl,
+                       1, 2, 0, 1,
+                     (GtkAttachOptions)(GTK_EXPAND | GTK_FILL),
+                     (GtkAttachOptions)(GTK_EXPAND | GTK_FILL), 0, 0);
+    gtk_widget_show(scl);
+
+
+    model = gtk_tree_store_new(N_COL,
+                               G_TYPE_STRING,
+                               G_TYPE_UINT);
+    GtkWidget *tree= gtk_tree_view_new_with_model(GTK_TREE_MODEL(model));
+    g_object_unref(model);
+
+    renderer = gtk_cell_renderer_text_new ();
+    col = gtk_tree_view_column_new_with_attributes("Playlist",
+                                                   renderer,
+                                                   "text", COL_ONE,
+                                                   NULL);
+    gtk_tree_view_append_column(GTK_TREE_VIEW(tree),
+                                col);
+    col = gtk_tree_view_column_new_with_attributes("Tracks",
+                                                   renderer,
+                                                   "text", COL_TWO,
+                                                   NULL);
+    gtk_tree_view_append_column(GTK_TREE_VIEW(tree),
+                                col);
+    gtk_container_add(GTK_CONTAINER(scl),
+                      GTK_WIDGET(tree));
+
+
+}
+
 int foo()
 {
     int  NumColumns = 2;
@@ -589,7 +629,7 @@ int foo()
                         NULL);
 
     //Table(tbl_Main)
-    tbl_Main = gtk_table_new(2, 1, FALSE);
+    tbl_Main = gtk_table_new(2, 2, FALSE);
     gtk_widget_show(tbl_Main);
     gtk_container_add(GTK_CONTAINER(win_Main), tbl_Main);
 
@@ -631,6 +671,8 @@ int foo()
                       GTK_WIDGET(treeview));
 
     g_signal_connect(treeview, "row-activated", (GCallback) view_onRowActivated, NULL);
+
+    add_treeview_for_playlist_items();
 
     //Button(btn_key_Add)
     btn_key_Add = gtk_button_new_with_label("Add");
