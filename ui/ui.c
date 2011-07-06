@@ -42,13 +42,6 @@
 
 #include "audio.h"
 
-enum {
-    COL_NAME = 0,
-    COL_AGE,
-    NUM_COLS
-};
-
-
 /* --- Data --- */
 /// The application key is specific to each project, and allows Spotify
 /// to produce statistics on how our service is used.
@@ -101,6 +94,11 @@ enum StoreColumns {
   COL_ONE,
   COL_TWO,
   N_COL
+};
+
+enum TracksColumns {
+    T_COL_ONE,
+    T_N_COL
 };
 
 void add_row_to_list(const char* name, int numtracks)
@@ -590,29 +588,20 @@ void add_treeview_for_playlist_items()
     gtk_widget_show(scl);
 
 
-    model = gtk_tree_store_new(N_COL,
-                               G_TYPE_STRING,
-                               G_TYPE_UINT);
+    model = gtk_tree_store_new(T_N_COL,
+                               G_TYPE_STRING);
     GtkWidget *tree= gtk_tree_view_new_with_model(GTK_TREE_MODEL(model));
     g_object_unref(model);
 
     renderer = gtk_cell_renderer_text_new ();
-    col = gtk_tree_view_column_new_with_attributes("Playlist",
+    col = gtk_tree_view_column_new_with_attributes("Track",
                                                    renderer,
-                                                   "text", COL_ONE,
-                                                   NULL);
-    gtk_tree_view_append_column(GTK_TREE_VIEW(tree),
-                                col);
-    col = gtk_tree_view_column_new_with_attributes("Tracks",
-                                                   renderer,
-                                                   "text", COL_TWO,
+                                                   "text", T_COL_ONE,
                                                    NULL);
     gtk_tree_view_append_column(GTK_TREE_VIEW(tree),
                                 col);
     gtk_container_add(GTK_CONTAINER(scl),
                       GTK_WIDGET(tree));
-
-
 }
 
 int foo()
