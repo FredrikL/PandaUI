@@ -83,7 +83,7 @@ GtkTreeStore        *store = NULL;
 GtkWidget           *treeview = NULL;
 GtkCellRenderer     *renderer = NULL;
 GtkTreeStore *model;
-
+GtkWidget *treeTracks = NULL;
 GtkWidget           *btn_key_Add;
 GtkTreeViewColumn   *col;
 
@@ -121,8 +121,7 @@ void add_row_to_list(const char* name, int numtracks)
  */
 static void try_jukebox_start(void)
 {
-    //return; // no autostart
-	sp_track *t;
+ 	sp_track *t;
 
 	if (!g_jukeboxlist)
 		return;
@@ -493,7 +492,7 @@ static sp_session_config spconfig = {
 	.settings_location = "tmp",
 	.application_key = g_appkey,
 	.application_key_size = 0, // Set in main()
-	.user_agent = "spotify-jukebox-example",
+	.user_agent = "panda-ui",
 	.callbacks = &session_callbacks,
 	NULL,
 };
@@ -549,6 +548,50 @@ sp_playlist* get_playlist_by_name(gchar *name)
     }
 }
 
+void add_track_to_track_list(const char* name)
+{
+    GtkTreeModel *model;
+    GtkTreeIter iter;
+
+    model = gtk_tree_view_get_model (GTK_TREE_VIEW (treeTracks));
+    gtk_tree_store_append (GTK_TREE_STORE (model), &iter, NULL);
+    gtk_tree_store_set (GTK_TREE_STORE (model), &iter,
+                          T_COL_ONE, name,
+                          -1);
+}
+
+static void remove_all()
+{
+  GtkTreeStore *store;
+  GtkTreeModel *model;
+  GtkTreeIter  iter;
+
+  model = gtk_tree_view_get_model (GTK_TREE_VIEW (treeTracks));
+  store = GTK_TREE_STORE(model);
+
+  if (gtk_tree_model_get_iter_first(model, &iter) == FALSE)
+      return;
+  gtk_tree_store_clear(store);
+}
+
+void loop_current_playlist()
+{
+    // clear tracks treeview
+    remove_all();
+
+    int num_tracks = sp_playlist_num_tracks(g_jukeboxlist);
+    int i;
+    sp_track *track;
+    for(i = 0; i < num_tracks; i++)
+    {
+        track = sp_playlist_track(g_jukeboxlist, i);
+        //printf("Track: %s\n",sp_track_name(track))
+        add_track_to_track_list(sp_track_name(track));
+
+    }
+
+}
+
 void
   view_onRowActivated (GtkTreeView        *treeview,
                        GtkTreePath        *path,
@@ -568,6 +611,7 @@ void
         sp_playlist*  pl = get_playlist_by_name(name);
        g_jukeboxlist = pl;
        printf("%s\n",sp_playlist_name(pl));
+       loop_current_playlist();
 
        g_free(name);
     }
@@ -590,7 +634,7 @@ void add_treeview_for_playlist_items()
 
     model = gtk_tree_store_new(T_N_COL,
                                G_TYPE_STRING);
-    GtkWidget *tree= gtk_tree_view_new_with_model(GTK_TREE_MODEL(model));
+    treeTracks= gtk_tree_view_new_with_model(GTK_TREE_MODEL(model));
     g_object_unref(model);
 
     renderer = gtk_cell_renderer_text_new ();
@@ -598,10 +642,10 @@ void add_treeview_for_playlist_items()
                                                    renderer,
                                                    "text", T_COL_ONE,
                                                    NULL);
-    gtk_tree_view_append_column(GTK_TREE_VIEW(tree),
+    gtk_tree_view_append_column(GTK_TREE_VIEW(treeTracks),
                                 col);
     gtk_container_add(GTK_CONTAINER(scl),
-                      GTK_WIDGET(tree));
+                      GTK_WIDGET(treeTracks));
 }
 
 int foo()
