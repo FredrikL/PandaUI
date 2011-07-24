@@ -25,6 +25,5 @@ alsa-audio.o: alsa-audio.c audio.h
 dummy-audio.o: dummy-audio.c audio.h
 osx-audio.o: osx-audio.c audio.h
 openal-audio.o: openal-audio.c audio.h
-jukebox.o: jukebox.c audio.h
 playtrack.o: playtrack.c audio.h
 ui.o: ui.c audio.h

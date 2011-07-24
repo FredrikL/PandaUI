@@ -562,6 +562,9 @@ void add_track_to_track_list(const char* name)
 
 static void remove_all()
 {
+    // memleak?
+    // call store unref first?
+
   GtkTreeStore *store;
   GtkTreeModel *model;
   GtkTreeIter  iter;
@@ -585,11 +588,8 @@ void loop_current_playlist()
     for(i = 0; i < num_tracks; i++)
     {
         track = sp_playlist_track(g_jukeboxlist, i);
-        //printf("Track: %s\n",sp_track_name(track))
         add_track_to_track_list(sp_track_name(track));
-
     }
-
 }
 
 void
