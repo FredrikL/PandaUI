@@ -19,6 +19,7 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="ui/Makefile" />
 		<Unit filename="ui/alsa-audio.c">
 			<Option compilerVar="CC" />
 		</Unit>
@@ -38,6 +39,10 @@
 		<Unit filename="ui/osx-audio.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="ui/player.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="ui/player.h" />
 		<Unit filename="ui/playtrack.c">
 			<Option compilerVar="CC" />
 		</Unit>

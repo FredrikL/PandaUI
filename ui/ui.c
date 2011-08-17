@@ -39,7 +39,6 @@
 #include <gtk/gtk.h>
 
 #include <libspotify/api.h>
-
 #include "audio.h"
 
 /* --- Data --- */
@@ -114,6 +113,7 @@ void add_row_to_list(const char* name, int numtracks)
                           -1);
 }
 
+
 /**
  * Called on various events to start playback if it hasn't been started already.
  *
@@ -139,7 +139,7 @@ static void try_jukebox_start(void)
 	t = sp_playlist_track(g_jukeboxlist, g_track_index);
 
 	if (g_currenttrack && t != g_currenttrack) {
-		/* Someone changed the current track */
+		// Someone changed the current track
 		audio_fifo_flush(&g_audiofifo);
 		sp_session_player_unload(g_sess);
 		g_currenttrack = NULL;
@@ -162,6 +162,7 @@ static void try_jukebox_start(void)
 	sp_session_player_load(g_sess, t);
 	sp_session_player_play(g_sess, 1);
 }
+
 
 /* --------------------------  PLAYLIST CALLBACKS  ------------------------- */
 /**
@@ -592,6 +593,27 @@ void loop_current_playlist()
     }
 }
 
+void onTracksRowActivated(GtkTreeView        *treeview,
+                       GtkTreePath        *path,
+                       GtkTreeViewColumn  *col,
+                       gpointer            userdata)
+{
+    GtkTreeModel *model;
+    GtkTreeIter   iter;
+
+    model = gtk_tree_view_get_model(treeview);
+
+    if (gtk_tree_model_get_iter(model, &iter, path))
+    {
+       gchar *name;
+
+        gtk_tree_model_get(model, &iter, COL_ONE, &name, -1);
+       printf("%s\n",name);
+
+       g_free(name);
+    }
+}
+
 void
   view_onRowActivated (GtkTreeView        *treeview,
                        GtkTreePath        *path,
@@ -644,6 +666,8 @@ void add_treeview_for_playlist_items()
                                                    NULL);
     gtk_tree_view_append_column(GTK_TREE_VIEW(treeTracks),
                                 col);
+
+    g_signal_connect(treeTracks, "row-activated", (GCallback) onTracksRowActivated, NULL);
     gtk_container_add(GTK_CONTAINER(scl),
                       GTK_WIDGET(treeTracks));
 }
